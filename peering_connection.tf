@@ -34,7 +34,7 @@ resource "aws_vpc_peering_connection_options" "peer" {
   vpc_peering_connection_id = aws_vpc_peering_connection.this.id
 
   accepter {
-    allow_remote_vpc_dns_resolution = true
+    allow_remote_vpc_dns_resolution = var.allow_peer_resolve_dns_in_this
   }
 
   #   requester {
