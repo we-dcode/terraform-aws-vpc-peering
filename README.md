@@ -6,7 +6,7 @@ provider "aws" {
 }
 
 module "peering_connection" {
-  source = ""
+  source = "github.com/we-dcode/terraform-aws-vpc-peering"
 
   providers = {
     aws.this = aws
