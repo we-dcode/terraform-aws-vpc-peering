@@ -19,7 +19,8 @@ data "aws_route_tables" "this" {
 }
 
 locals {
-  this_vpc_route_table_ids = length(var.this_vpc_route_table_ids) > 0 ? var.this_vpc_route_table_ids : data.aws_route_tables.this.ids
+  
+  this_vpc_route_table_ids = length(var.this_vpc_route_table_ids) > 0 ? var.this_vpc_route_table_ids : toset(data.aws_route_tables.this[*].id)
 }
 
 resource "aws_route" "peer_routing_from_this" {
