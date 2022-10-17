@@ -1,5 +1,6 @@
 # terraform-aws-vpc-peering
 
+```
 provider "aws" {
 
 }
@@ -19,3 +20,4 @@ module "peering_connection" {
   peer_vpc_id                    = "peer vpc id"
   auto_accept_peering_connection = true
 }
+```
