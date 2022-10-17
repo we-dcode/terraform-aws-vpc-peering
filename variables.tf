@@ -24,3 +24,8 @@ variable "this_vpc_route_table_ids" {
   type    = list(string)
   default = []
 }
+
+variable "peer_vpc_route_table_ids" {
+  type    = list(string)
+  default = []
+}
