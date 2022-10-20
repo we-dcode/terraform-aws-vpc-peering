@@ -20,10 +20,6 @@ resource "aws_vpc_peering_connection_accepter" "peer" {
   vpc_peering_connection_id = aws_vpc_peering_connection.this.id
   auto_accept               = var.auto_accept_peering_connection
 
-  accepter {
-    allow_remote_vpc_dns_resolution = var.allow_this_resolve_dns_in_peer
-  }
-
   tags = {
     Side = "Accepter"
   }
@@ -37,10 +33,20 @@ resource "aws_vpc_peering_connection_options" "peer" {
     allow_remote_vpc_dns_resolution = var.allow_peer_resolve_dns_in_this
   }
 
-  #   requester {
-  #     allow_vpc_to_remote_classic_link = true
-  #     allow_classic_link_to_remote_vpc = true
-  #   }
+  depends_on = [
+    aws_vpc_peering_connection.this,
+    aws_vpc_peering_connection_accepter.peer
+  ]
+
+}
+
+resource "aws_vpc_peering_connection_options" "this" {
+  provider                  = aws.this
+  vpc_peering_connection_id = aws_vpc_peering_connection.this.id
+
+  requester {
+        allow_remote_vpc_dns_resolution = var.allow_this_resolve_dns_in_peer
+  }
 
   depends_on = [
     aws_vpc_peering_connection.this,
