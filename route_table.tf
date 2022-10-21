@@ -18,12 +18,6 @@ data "aws_route_tables" "this" {
   vpc_id = data.aws_vpc.this.id
 }
 
-locals {
-
-  this_vpc_route_table_ids = length(var.this_vpc_route_table_ids) > 0 ? var.this_vpc_route_table_ids : toset(flatten(data.aws_route_tables.this[*].ids))
-  peer_vpc_route_table_ids = length(var.peer_vpc_route_table_ids) > 0 ? var.peer_vpc_route_table_ids : toset(flatten(data.aws_route_tables.peer[*].ids))
-}
-
 resource "aws_route" "peer_routing_from_this" {
 
   provider = aws.this
@@ -33,6 +27,12 @@ resource "aws_route" "peer_routing_from_this" {
   route_table_id            = local.this_vpc_route_table_ids[count.index]
   destination_cidr_block    = data.aws_vpc.peer.cidr_block
   vpc_peering_connection_id = aws_vpc_peering_connection.this.id
+}
+
+locals {
+
+  this_vpc_route_table_ids = (var.target_workaround == true || length(var.this_vpc_route_table_ids) > 0) ? var.this_vpc_route_table_ids : toset(flatten(data.aws_route_tables.this[*].ids))
+  peer_vpc_route_table_ids = (var.target_workaround == true || length(var.peer_vpc_route_table_ids) > 0) ? var.peer_vpc_route_table_ids : toset(flatten(data.aws_route_tables.peer[*].ids))
 }
 
 data "aws_route_tables" "peer" {

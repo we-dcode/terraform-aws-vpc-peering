@@ -29,3 +29,9 @@ variable "peer_vpc_route_table_ids" {
   type    = list(string)
   default = []
 }
+
+variable "target_workaround" {
+  description = "This will prepare all required resources without applying routing tables, to workaround the runtime issues."
+  type = bool
+  default = false
+}
